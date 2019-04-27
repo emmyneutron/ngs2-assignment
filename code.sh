@@ -20,6 +20,12 @@ ls
 gunzip SRR8797509*.fastq.gz
 ls
 cd ..
-mate1=~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_1.part_001.part_001.fastq.
-mate2=~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_2.part_001.part_001.fastq.
+#mate1=~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_1.part_001.part_001.fastq.
+#mate2=~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_2.part_001.part_001.fastq.
+
+#3 alignment
+cd ..
+mkdir runDir && cd runDir
+STAR --runThreadN 1 --genomeDir ~/workdir/assignment/ngs2_assignment/genome/idx --readFilesIn ~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_1.part_001.part_001.fastq ~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_2.part_001.part_001.fastq
+
 
