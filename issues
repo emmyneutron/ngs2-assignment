@@ -1,0 +1,5 @@
+#1 while identifying $genomeDir it can't be identified
+#2 while running this command: STAR --runMode genomeGenerate --genomeDir $genomeDir --genomeFastaFiles hg19.fa\  --runThreadN 1
+# i get fatal error: couldn't open genomeFastaFile
+#3 while idexing the whole genome in STAR idexing step, I got my core dumped
+#4 i have too long user name and path in termonal so i use this command to shorten it: if [ "$color_prompt" = yes ]; then     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '; else     PS1='${debian_chroot:+($debian_chroot)}\u:\W\$ '; fi
