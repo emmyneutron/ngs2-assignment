@@ -6,17 +6,21 @@ sudo apt-get install make
 sudo apt install rna-star
 
 #1- generate indexed genome for 1st pass alignment:
-mkdir ~/workdir2/assignment/ngs2_assignment/genome && cd ~/workdir2/assignment/ngs2_assignment/genome
+mkdir ~/workdir/assignment/ngs2_assignment/genome && cd ~/workdir/assignment/ngs2_assignment/genome
 mkdir idx/
-STAR --runThreadN 1 --runMode genomeGenerate --genomeDir idx/ --genomeFastaFiles ~/workdir2/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa
-#2- Alignment jobs were executed as follows:
+STAR --runThreadN 1 --runMode genomeGenerate --genomeDir idx/ --genomeFastaFiles ~/workdir/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa
+# Alignment jobs were executed as follows:
 cd ~/workdir2/assignment/ngs2_assignment
 mkdir runDir && cd runDir
-STAR --runThreadN 1 --genomeDir ~/workdir2/assignment/ngs2_assignment/genome/idx --readFilesIn ~/workdir2/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_1.part_001.part_001.fastq ~/workdir2/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_2.part_001.part_001.fastq
-#3- generate indexed genome for 2nd pass alignment:
-mkdir ~/workdir2/assignment/ngs2_assignment/genome2 && cd ~/workdir2/assignment/ngs2_assignment/genome2
+STAR --runThreadN 1 --genomeDir ~/workdir/assignment/ngs2_assignment/genome/idx --readFilesIn ~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_1.part_001.part_001.fastq ~/workdir2/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_2.part_001.part_001.fastq
+# generate indexed genome for 2nd pass alignment:
+mkdir ~/workdir/assignment/ngs2_assignment/genome2 && cd ~/workdir/assignment/ngs2_assignment/genome2
 mkdir idy/
-STAR --runMode genomeGenerate --genomeDir idy/ --genomeFastaFiles ~/workdir2/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa --sjdbFileChrStartEnd ~/workdir2/assignment/ngs2_assignment/runDir/SJ.out.tab --sjdbOverhang 75 --runThreadN 1
+STAR --runMode genomeGenerate --genomeDir idy/ --genomeFastaFiles ~/workdir/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa --sjdbFileChrStartEnd ~/workdir/assignment/ngs2_assignment/runDir/SJ.out.tab --sjdbOverhang 75 --runThreadN 1
+# final alignment
+cd ~/workdir/assignment/ngs2_assignment
+mkdir runDir2 && cd runDir2
+STAR --runThreadN 1 --genomeDir ~/workdir/assignment/ngs2_assignment/genome2/idy --readFilesIn ~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_1.part_001.part_001.fastq ~/workdir/assignment/ngs2_assignment/sample_data/ngs2-assignment-data/SRR8797509_2.part_001.part_001.fastq
 
 #2 data preparation
 mkdir ~/workdir/assignment/ngs2_assignment/sample_data && cd ~/workdir/assignment/ngs2_assignment/sample_data
@@ -37,6 +41,32 @@ conda install -c bioconda picard
 picard_path=$CONDA_PREFIX/share/picard-2.19.0-0
 sudo apt install picard-tools
 
-java -jar picard.jar AddOrReplaceReadGroups I=star_output.sam O=rg_added_sorted.bam SO=coordinate RGID=id RGLB=library RGPL=platform RGPU=machine RGSM=sample 
+cd ~/workdir/assignment/ngs2_assignment/runDir2
+picard-tools AddOrReplaceReadGroups I=Aligned.out.sam O=rg_added_sorted.bam SO=coordinate RGID=4 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=20
+picard-tools MarkDuplicates I=rg_added_sorted.bam O=dedupped.bam  CREATE_INDEX=true VALIDATION_STRINGENCY=SILENT M=output.metrics  
 
-java -jar picard.jar MarkDuplicates I=rg_added_sorted.bam O=dedupped.bam  CREATE_INDEX=true VALIDATION_STRINGENCY=SILENT M=output.metrics
+#Install GATK
+conda install -c bioconda gatk4
+#5 Split'N'Trim and reassign mapping qualities
+cd ~/workdir/assignment/ngs2_assignment/sample_data
+samtools fqidx chr22_with_ERCC92.fa
+gatk CreateSequenceDictionary -R chr22_with_ERCC92.fa -O chr22_with_ERCC92.dict
+cd ~/workdir/assignment/ngs2_assignment
+mkdir split && cd split 
+GenomeFasta=~/workdir/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa
+gatk SplitNCigarReads -R $GenomeFasta -I ~/workdir/assignment/ngs2_assignment/runDir2/dedupped.bam -O split.bam
+
+#6 Downloading known variants
+cd ~/workdir/assignment/ngs2_assignment/sample_data
+wget ftp://ftp.ensembl.org/pub/release-96/variation/vcf/homo_sapiens/homo_sapiens-chr22.vcf.gz
+gunzip homo_sapiens-chr22.vcf.gz
+
+grep "^#" homo_sapiens-chr22.vcf > homo_sapiens-chr22_fam.vcf
+grep "^22" homo_sapiens-chr22.vcf | sed 's/^22/chr22/' >> homo_sapiens-chr22_fam.vcf
+gatk IndexFeatureFile -F homo_sapiens-chr22_fam.vcf
+
+#7 Base Recalibration by GATK  
+cd ~/workdir/assignment/ngs2_assignment
+mkdir BaseRecalibrate && cd BaseRecalibrate
+GenomeFasta=~/workdir/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa
+gatk --java-options "-Xmx2G" BaseRecalibrator -R $GenomeFasta -I ~/workdir/assignment/ngs2_assignment/runDir2/dedupped.bam -knownSites ~/workdir/assignment/ngs2_assignment/sample_data/homo_sapiens-chr22_fam.vcf -O recal_data.table
