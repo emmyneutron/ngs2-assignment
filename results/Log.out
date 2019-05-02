@@ -1,5 +1,5 @@
-STAR version=STAR_2.5.4b
-STAR compilation time,server,dir=<not set in Debian>
+STAR version=STAR_2.6.1a_08-27
+STAR compilation time,server,dir=Mon Aug 27 18:20:13 EDT 2018 florence.cshl.edu:/sonas-hs/gingeras/nlsas_norepl/user/dobin/STAR/STAR.master/source
 ##### DEFAULT parameters:
 versionSTAR                       20201
 versionGenome                     20101   20200   
@@ -60,9 +60,11 @@ outSAMheaderPG                    -
 outSAMheaderCommentFile           -
 outBAMcompression                 1
 outBAMsortingThreadN              0
+outBAMsortingBinsN                50
 outSAMfilter                      None   
 outSAMmultNmax                    18446744073709551615
 outSAMattrIHstart                 1
+outSAMtlen                        1
 outSJfilterReads                  All
 outSJfilterCountUniqueMin         3   1   1   1   
 outSJfilterCountTotalMin          3   1   1   1   
@@ -128,6 +130,9 @@ alignTranscriptsPerWindowNmax     100
 alignEndsType                     Local
 alignSoftClipAtReferenceEnds      Yes
 alignEndsProtrude                 0   ConcordantPair   
+alignInsertionFlush               None
+peOverlapNbasesMin                0
+peOverlapMMp                      0.01
 chimSegmentMin                    0
 chimScoreMin                      0
 chimScoreDropMax                  20
@@ -135,9 +140,13 @@ chimScoreSeparation               10
 chimScoreJunctionNonGTAG          -1
 chimMainSegmentMultNmax           10
 chimJunctionOverhangMin           20
-chimOutType                       SeparateSAMold   
+chimOutType                       Junctions   
 chimFilter                        banGenomicN   
 chimSegmentReadGapMax             0
+chimMultimapNmax                  0
+chimMultimapScoreRange            1
+chimNonchimScoreDropMin           20
+chimOutJunctionFormat             0   
 sjdbFileChrStartEnd               -   
 sjdbGTFfile                       -
 sjdbGTFchrPrefix                  -
@@ -147,30 +156,36 @@ sjdbGTFtagExonParentGene          gene_id
 sjdbOverhang                      100
 sjdbScore                         2
 sjdbInsertSave                    Basic
+varVCFfile                        -
+waspOutputMode                    None
 quantMode                         -   
 quantTranscriptomeBAMcompression    1
 quantTranscriptomeBan             IndelSoftclipSingleend
 twopass1readsN                    18446744073709551615
 twopassMode                       None
 ##### Command Line:
-STAR --runThreadN 1 --runMode genomeGenerate --genomeDir idx/ --genomeFastaFiles chr22_with_ERCC92.fa
+STAR --runMode genomeGenerate --genomeDir /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass --genomeFastaFiles /home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa --sjdbFileChrStartEnd /home/ngs-01/workdir/Assignment2/1pass/SJ.out.tab --sjdbOverhang 75 --runThreadN 4
 ##### Initial USER parameters from Command Line:
 ###### All USER parameters from Command Line:
-runThreadN                    1     ~RE-DEFINED
 runMode                       genomeGenerate     ~RE-DEFINED
-genomeDir                     idx/     ~RE-DEFINED
-genomeFastaFiles              chr22_with_ERCC92.fa        ~RE-DEFINED
+genomeDir                     /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass     ~RE-DEFINED
+genomeFastaFiles              /home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa        ~RE-DEFINED
+sjdbFileChrStartEnd           /home/ngs-01/workdir/Assignment2/1pass/SJ.out.tab        ~RE-DEFINED
+sjdbOverhang                  75     ~RE-DEFINED
+runThreadN                    4     ~RE-DEFINED
 ##### Finished reading parameters from all sources
 
 ##### Final user re-defined parameters-----------------:
 runMode                           genomeGenerate
-runThreadN                        1
-genomeDir                         idx/
-genomeFastaFiles                  chr22_with_ERCC92.fa   
+runThreadN                        4
+genomeDir                         /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass
+genomeFastaFiles                  /home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa   
+sjdbFileChrStartEnd               /home/ngs-01/workdir/Assignment2/1pass/SJ.out.tab   
+sjdbOverhang                      75
 
 -------------------------------
 ##### Final effective command line:
-STAR   --runMode genomeGenerate   --runThreadN 1   --genomeDir idx/   --genomeFastaFiles chr22_with_ERCC92.fa   
+STAR   --runMode genomeGenerate   --runThreadN 4   --genomeDir /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass   --genomeFastaFiles /home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa      --sjdbFileChrStartEnd /home/ngs-01/workdir/Assignment2/1pass/SJ.out.tab      --sjdbOverhang 75
 
 ##### Final parameters after user input--------------------------------:
 versionSTAR                       20201
@@ -178,12 +193,12 @@ versionGenome                     20101   20200
 parametersFiles                   -   
 sysShell                          -
 runMode                           genomeGenerate
-runThreadN                        1
+runThreadN                        4
 runDirPerm                        User_RWX
 runRNGseed                        777
-genomeDir                         idx/
+genomeDir                         /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass
 genomeLoad                        NoSharedMemory
-genomeFastaFiles                  chr22_with_ERCC92.fa   
+genomeFastaFiles                  /home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa   
 genomeChainFiles                  -   
 genomeSAindexNbases               14
 genomeChrBinNbits                 18
@@ -232,9 +247,11 @@ outSAMheaderPG                    -
 outSAMheaderCommentFile           -
 outBAMcompression                 1
 outBAMsortingThreadN              0
+outBAMsortingBinsN                50
 outSAMfilter                      None   
 outSAMmultNmax                    18446744073709551615
 outSAMattrIHstart                 1
+outSAMtlen                        1
 outSJfilterReads                  All
 outSJfilterCountUniqueMin         3   1   1   1   
 outSJfilterCountTotalMin          3   1   1   1   
@@ -300,6 +317,9 @@ alignTranscriptsPerWindowNmax     100
 alignEndsType                     Local
 alignSoftClipAtReferenceEnds      Yes
 alignEndsProtrude                 0   ConcordantPair   
+alignInsertionFlush               None
+peOverlapNbasesMin                0
+peOverlapMMp                      0.01
 chimSegmentMin                    0
 chimScoreMin                      0
 chimScoreDropMax                  20
@@ -307,18 +327,24 @@ chimScoreSeparation               10
 chimScoreJunctionNonGTAG          -1
 chimMainSegmentMultNmax           10
 chimJunctionOverhangMin           20
-chimOutType                       SeparateSAMold   
+chimOutType                       Junctions   
 chimFilter                        banGenomicN   
 chimSegmentReadGapMax             0
-sjdbFileChrStartEnd               -   
+chimMultimapNmax                  0
+chimMultimapScoreRange            1
+chimNonchimScoreDropMin           20
+chimOutJunctionFormat             0   
+sjdbFileChrStartEnd               /home/ngs-01/workdir/Assignment2/1pass/SJ.out.tab   
 sjdbGTFfile                       -
 sjdbGTFchrPrefix                  -
 sjdbGTFfeatureExon                exon
 sjdbGTFtagExonParentTranscript    transcript_id
 sjdbGTFtagExonParentGene          gene_id
-sjdbOverhang                      100
+sjdbOverhang                      75
 sjdbScore                         2
 sjdbInsertSave                    Basic
+varVCFfile                        -
+waspOutputMode                    None
 quantMode                         -   
 quantTranscriptomeBAMcompression    1
 quantTranscriptomeBan             IndelSoftclipSingleend
@@ -327,117 +353,135 @@ twopassMode                       None
 ----------------------------------------
 
 Finished loading and checking parameters
-Apr 27 16:04:04 ... starting to generate Genome files
-chr22_with_ERCC92.fa : chr # 0  "chr22" chrStart: 0
-chr22_with_ERCC92.fa : chr # 1  "ERCC-00002" chrStart: 50855936
-chr22_with_ERCC92.fa : chr # 2  "ERCC-00003" chrStart: 51118080
-chr22_with_ERCC92.fa : chr # 3  "ERCC-00004" chrStart: 51380224
-chr22_with_ERCC92.fa : chr # 4  "ERCC-00009" chrStart: 51642368
-chr22_with_ERCC92.fa : chr # 5  "ERCC-00012" chrStart: 51904512
-chr22_with_ERCC92.fa : chr # 6  "ERCC-00013" chrStart: 52166656
-chr22_with_ERCC92.fa : chr # 7  "ERCC-00014" chrStart: 52428800
-chr22_with_ERCC92.fa : chr # 8  "ERCC-00016" chrStart: 52690944
-chr22_with_ERCC92.fa : chr # 9  "ERCC-00017" chrStart: 52953088
-chr22_with_ERCC92.fa : chr # 10  "ERCC-00019" chrStart: 53215232
-chr22_with_ERCC92.fa : chr # 11  "ERCC-00022" chrStart: 53477376
-chr22_with_ERCC92.fa : chr # 12  "ERCC-00024" chrStart: 53739520
-chr22_with_ERCC92.fa : chr # 13  "ERCC-00025" chrStart: 54001664
-chr22_with_ERCC92.fa : chr # 14  "ERCC-00028" chrStart: 54263808
-chr22_with_ERCC92.fa : chr # 15  "ERCC-00031" chrStart: 54525952
-chr22_with_ERCC92.fa : chr # 16  "ERCC-00033" chrStart: 54788096
-chr22_with_ERCC92.fa : chr # 17  "ERCC-00034" chrStart: 55050240
-chr22_with_ERCC92.fa : chr # 18  "ERCC-00035" chrStart: 55312384
-chr22_with_ERCC92.fa : chr # 19  "ERCC-00039" chrStart: 55574528
-chr22_with_ERCC92.fa : chr # 20  "ERCC-00040" chrStart: 55836672
-chr22_with_ERCC92.fa : chr # 21  "ERCC-00041" chrStart: 56098816
-chr22_with_ERCC92.fa : chr # 22  "ERCC-00042" chrStart: 56360960
-chr22_with_ERCC92.fa : chr # 23  "ERCC-00043" chrStart: 56623104
-chr22_with_ERCC92.fa : chr # 24  "ERCC-00044" chrStart: 56885248
-chr22_with_ERCC92.fa : chr # 25  "ERCC-00046" chrStart: 57147392
-chr22_with_ERCC92.fa : chr # 26  "ERCC-00048" chrStart: 57409536
-chr22_with_ERCC92.fa : chr # 27  "ERCC-00051" chrStart: 57671680
-chr22_with_ERCC92.fa : chr # 28  "ERCC-00053" chrStart: 57933824
-chr22_with_ERCC92.fa : chr # 29  "ERCC-00054" chrStart: 58195968
-chr22_with_ERCC92.fa : chr # 30  "ERCC-00057" chrStart: 58458112
-chr22_with_ERCC92.fa : chr # 31  "ERCC-00058" chrStart: 58720256
-chr22_with_ERCC92.fa : chr # 32  "ERCC-00059" chrStart: 58982400
-chr22_with_ERCC92.fa : chr # 33  "ERCC-00060" chrStart: 59244544
-chr22_with_ERCC92.fa : chr # 34  "ERCC-00061" chrStart: 59506688
-chr22_with_ERCC92.fa : chr # 35  "ERCC-00062" chrStart: 59768832
-chr22_with_ERCC92.fa : chr # 36  "ERCC-00067" chrStart: 60030976
-chr22_with_ERCC92.fa : chr # 37  "ERCC-00069" chrStart: 60293120
-chr22_with_ERCC92.fa : chr # 38  "ERCC-00071" chrStart: 60555264
-chr22_with_ERCC92.fa : chr # 39  "ERCC-00073" chrStart: 60817408
-chr22_with_ERCC92.fa : chr # 40  "ERCC-00074" chrStart: 61079552
-chr22_with_ERCC92.fa : chr # 41  "ERCC-00075" chrStart: 61341696
-chr22_with_ERCC92.fa : chr # 42  "ERCC-00076" chrStart: 61603840
-chr22_with_ERCC92.fa : chr # 43  "ERCC-00077" chrStart: 61865984
-chr22_with_ERCC92.fa : chr # 44  "ERCC-00078" chrStart: 62128128
-chr22_with_ERCC92.fa : chr # 45  "ERCC-00079" chrStart: 62390272
-chr22_with_ERCC92.fa : chr # 46  "ERCC-00081" chrStart: 62652416
-chr22_with_ERCC92.fa : chr # 47  "ERCC-00083" chrStart: 62914560
-chr22_with_ERCC92.fa : chr # 48  "ERCC-00084" chrStart: 63176704
-chr22_with_ERCC92.fa : chr # 49  "ERCC-00085" chrStart: 63438848
-chr22_with_ERCC92.fa : chr # 50  "ERCC-00086" chrStart: 63700992
-chr22_with_ERCC92.fa : chr # 51  "ERCC-00092" chrStart: 63963136
-chr22_with_ERCC92.fa : chr # 52  "ERCC-00095" chrStart: 64225280
-chr22_with_ERCC92.fa : chr # 53  "ERCC-00096" chrStart: 64487424
-chr22_with_ERCC92.fa : chr # 54  "ERCC-00097" chrStart: 64749568
-chr22_with_ERCC92.fa : chr # 55  "ERCC-00098" chrStart: 65011712
-chr22_with_ERCC92.fa : chr # 56  "ERCC-00099" chrStart: 65273856
-chr22_with_ERCC92.fa : chr # 57  "ERCC-00104" chrStart: 65536000
-chr22_with_ERCC92.fa : chr # 58  "ERCC-00108" chrStart: 65798144
-chr22_with_ERCC92.fa : chr # 59  "ERCC-00109" chrStart: 66060288
-chr22_with_ERCC92.fa : chr # 60  "ERCC-00111" chrStart: 66322432
-chr22_with_ERCC92.fa : chr # 61  "ERCC-00112" chrStart: 66584576
-chr22_with_ERCC92.fa : chr # 62  "ERCC-00113" chrStart: 66846720
-chr22_with_ERCC92.fa : chr # 63  "ERCC-00116" chrStart: 67108864
-chr22_with_ERCC92.fa : chr # 64  "ERCC-00117" chrStart: 67371008
-chr22_with_ERCC92.fa : chr # 65  "ERCC-00120" chrStart: 67633152
-chr22_with_ERCC92.fa : chr # 66  "ERCC-00123" chrStart: 67895296
-chr22_with_ERCC92.fa : chr # 67  "ERCC-00126" chrStart: 68157440
-chr22_with_ERCC92.fa : chr # 68  "ERCC-00130" chrStart: 68419584
-chr22_with_ERCC92.fa : chr # 69  "ERCC-00131" chrStart: 68681728
-chr22_with_ERCC92.fa : chr # 70  "ERCC-00134" chrStart: 68943872
-chr22_with_ERCC92.fa : chr # 71  "ERCC-00136" chrStart: 69206016
-chr22_with_ERCC92.fa : chr # 72  "ERCC-00137" chrStart: 69468160
-chr22_with_ERCC92.fa : chr # 73  "ERCC-00138" chrStart: 69730304
-chr22_with_ERCC92.fa : chr # 74  "ERCC-00142" chrStart: 69992448
-chr22_with_ERCC92.fa : chr # 75  "ERCC-00143" chrStart: 70254592
-chr22_with_ERCC92.fa : chr # 76  "ERCC-00144" chrStart: 70516736
-chr22_with_ERCC92.fa : chr # 77  "ERCC-00145" chrStart: 70778880
-chr22_with_ERCC92.fa : chr # 78  "ERCC-00147" chrStart: 71041024
-chr22_with_ERCC92.fa : chr # 79  "ERCC-00148" chrStart: 71303168
-chr22_with_ERCC92.fa : chr # 80  "ERCC-00150" chrStart: 71565312
-chr22_with_ERCC92.fa : chr # 81  "ERCC-00154" chrStart: 71827456
-chr22_with_ERCC92.fa : chr # 82  "ERCC-00156" chrStart: 72089600
-chr22_with_ERCC92.fa : chr # 83  "ERCC-00157" chrStart: 72351744
-chr22_with_ERCC92.fa : chr # 84  "ERCC-00158" chrStart: 72613888
-chr22_with_ERCC92.fa : chr # 85  "ERCC-00160" chrStart: 72876032
-chr22_with_ERCC92.fa : chr # 86  "ERCC-00162" chrStart: 73138176
-chr22_with_ERCC92.fa : chr # 87  "ERCC-00163" chrStart: 73400320
-chr22_with_ERCC92.fa : chr # 88  "ERCC-00164" chrStart: 73662464
-chr22_with_ERCC92.fa : chr # 89  "ERCC-00165" chrStart: 73924608
-chr22_with_ERCC92.fa : chr # 90  "ERCC-00168" chrStart: 74186752
-chr22_with_ERCC92.fa : chr # 91  "ERCC-00170" chrStart: 74448896
-chr22_with_ERCC92.fa : chr # 92  "ERCC-00171" chrStart: 74711040
+Apr 30 14:08:47 ... starting to generate Genome files
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 0  "22" chrStart: 0
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 1  "ERCC-00002" chrStart: 50855936
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 2  "ERCC-00003" chrStart: 51118080
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 3  "ERCC-00004" chrStart: 51380224
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 4  "ERCC-00009" chrStart: 51642368
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 5  "ERCC-00012" chrStart: 51904512
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 6  "ERCC-00013" chrStart: 52166656
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 7  "ERCC-00014" chrStart: 52428800
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 8  "ERCC-00016" chrStart: 52690944
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 9  "ERCC-00017" chrStart: 52953088
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 10  "ERCC-00019" chrStart: 53215232
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 11  "ERCC-00022" chrStart: 53477376
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 12  "ERCC-00024" chrStart: 53739520
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 13  "ERCC-00025" chrStart: 54001664
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 14  "ERCC-00028" chrStart: 54263808
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 15  "ERCC-00031" chrStart: 54525952
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 16  "ERCC-00033" chrStart: 54788096
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 17  "ERCC-00034" chrStart: 55050240
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 18  "ERCC-00035" chrStart: 55312384
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 19  "ERCC-00039" chrStart: 55574528
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 20  "ERCC-00040" chrStart: 55836672
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 21  "ERCC-00041" chrStart: 56098816
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 22  "ERCC-00042" chrStart: 56360960
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 23  "ERCC-00043" chrStart: 56623104
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 24  "ERCC-00044" chrStart: 56885248
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 25  "ERCC-00046" chrStart: 57147392
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 26  "ERCC-00048" chrStart: 57409536
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 27  "ERCC-00051" chrStart: 57671680
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 28  "ERCC-00053" chrStart: 57933824
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 29  "ERCC-00054" chrStart: 58195968
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 30  "ERCC-00057" chrStart: 58458112
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 31  "ERCC-00058" chrStart: 58720256
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 32  "ERCC-00059" chrStart: 58982400
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 33  "ERCC-00060" chrStart: 59244544
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 34  "ERCC-00061" chrStart: 59506688
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 35  "ERCC-00062" chrStart: 59768832
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 36  "ERCC-00067" chrStart: 60030976
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 37  "ERCC-00069" chrStart: 60293120
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 38  "ERCC-00071" chrStart: 60555264
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 39  "ERCC-00073" chrStart: 60817408
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 40  "ERCC-00074" chrStart: 61079552
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 41  "ERCC-00075" chrStart: 61341696
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 42  "ERCC-00076" chrStart: 61603840
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 43  "ERCC-00077" chrStart: 61865984
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 44  "ERCC-00078" chrStart: 62128128
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 45  "ERCC-00079" chrStart: 62390272
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 46  "ERCC-00081" chrStart: 62652416
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 47  "ERCC-00083" chrStart: 62914560
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 48  "ERCC-00084" chrStart: 63176704
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 49  "ERCC-00085" chrStart: 63438848
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 50  "ERCC-00086" chrStart: 63700992
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 51  "ERCC-00092" chrStart: 63963136
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 52  "ERCC-00095" chrStart: 64225280
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 53  "ERCC-00096" chrStart: 64487424
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 54  "ERCC-00097" chrStart: 64749568
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 55  "ERCC-00098" chrStart: 65011712
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 56  "ERCC-00099" chrStart: 65273856
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 57  "ERCC-00104" chrStart: 65536000
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 58  "ERCC-00108" chrStart: 65798144
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 59  "ERCC-00109" chrStart: 66060288
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 60  "ERCC-00111" chrStart: 66322432
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 61  "ERCC-00112" chrStart: 66584576
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 62  "ERCC-00113" chrStart: 66846720
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 63  "ERCC-00116" chrStart: 67108864
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 64  "ERCC-00117" chrStart: 67371008
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 65  "ERCC-00120" chrStart: 67633152
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 66  "ERCC-00123" chrStart: 67895296
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 67  "ERCC-00126" chrStart: 68157440
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 68  "ERCC-00130" chrStart: 68419584
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 69  "ERCC-00131" chrStart: 68681728
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 70  "ERCC-00134" chrStart: 68943872
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 71  "ERCC-00136" chrStart: 69206016
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 72  "ERCC-00137" chrStart: 69468160
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 73  "ERCC-00138" chrStart: 69730304
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 74  "ERCC-00142" chrStart: 69992448
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 75  "ERCC-00143" chrStart: 70254592
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 76  "ERCC-00144" chrStart: 70516736
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 77  "ERCC-00145" chrStart: 70778880
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 78  "ERCC-00147" chrStart: 71041024
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 79  "ERCC-00148" chrStart: 71303168
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 80  "ERCC-00150" chrStart: 71565312
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 81  "ERCC-00154" chrStart: 71827456
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 82  "ERCC-00156" chrStart: 72089600
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 83  "ERCC-00157" chrStart: 72351744
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 84  "ERCC-00158" chrStart: 72613888
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 85  "ERCC-00160" chrStart: 72876032
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 86  "ERCC-00162" chrStart: 73138176
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 87  "ERCC-00163" chrStart: 73400320
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 88  "ERCC-00164" chrStart: 73662464
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 89  "ERCC-00165" chrStart: 73924608
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 90  "ERCC-00168" chrStart: 74186752
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 91  "ERCC-00170" chrStart: 74448896
+/home/ngs-01/workdir/sample_data/chr22_with_ERCC92.fa : chr # 92  "ERCC-00171" chrStart: 74711040
+Estimated genome size=225973184   74973184   151000000
+GstrandBit=32
 Number of SA indices: 78485064
-Apr 27 16:04:07 ... starting to sort Suffix Array. This may take a long time...
-Number of chunks: 1;   chunks size limit: 18510020176 bytes
-Apr 27 16:04:08 ... sorting Suffix Array chunks and saving them to disk...
-Writing 627880512 bytes into idx//SA_0 ; empty space on disk = 9623175168 bytes ... done
-Apr 27 16:05:17 ... loading chunks from disk, packing SA...
-Apr 27 16:05:19 ... finished generating suffix array
-Apr 27 16:05:19 ... generating Suffix Array index
-Apr 27 16:05:39 ... completed Suffix Array index
-Apr 27 16:05:39 ... writing Genome to disk ...
-Writing 74973184 bytes into idx//Genome ; empty space on disk = 9623138304 bytes ... done
-SA size in bytes: 323750892
-Apr 27 16:05:39 ... writing Suffix Array to disk ...
-Writing 323750892 bytes into idx//SA ; empty space on disk = 9548165120 bytes ... done
-Apr 27 16:05:39 ... writing SAindex to disk
-Writing 8 bytes into idx//SAindex ; empty space on disk = 9224413184 bytes ... done
-Writing 120 bytes into idx//SAindex ; empty space on disk = 9224413184 bytes ... done
-Writing 1565873491 bytes into idx//SAindex ; empty space on disk = 9224409088 bytes ... done
-Apr 27 16:06:00 ..... finished successfully
+Apr 30 14:08:49 ... starting to sort Suffix Array. This may take a long time...
+Number of chunks: 4;   chunks size limit: 209293504 bytes
+Apr 30 14:08:49 ... sorting Suffix Array chunks and saving them to disk...
+Writing 7903008 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/SA_3 ; empty space on disk = 27202609152 bytes ... done
+Writing 204335200 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/SA_2 ; empty space on disk = 27194703872 bytes ...Writing 208617592 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/SA_0 ; empty space on disk = 27090436096 bytes ... done
+ done
+Writing 207024712 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/SA_1 ; empty space on disk = 26781741056 bytes ... done
+Apr 30 14:09:25 ... loading chunks from disk, packing SA...
+Apr 30 14:09:27 ... finished generating suffix array
+Apr 30 14:09:27 ... generating Suffix Array index
+Apr 30 14:09:40 ... completed Suffix Array index
+Loaded database junctions from file: /home/ngs-01/workdir/Assignment2/1pass/SJ.out.tab, total number of junctions: 2809 junctions
+
+Apr 30 14:09:40   Loaded database junctions from the pGe.sjdbFileChrStartEnd file(s), 2809 total junctions
+
+Apr 30 14:09:40   Finished preparing junctions
+Apr 30 14:09:40 ..... inserting junctions into the genome indices
+Apr 30 14:09:41   Finished SA search: number of new junctions=2809, old junctions=0
+Apr 30 14:09:42   Finished sorting SA indicesL nInd=842700
+Genome size with junctions=75397343  74973184   424159
+GstrandBit1=32   GstrandBit=32
+Apr 30 14:09:44   Finished inserting junction indices
+Apr 30 14:09:51   Finished SAi
+Apr 30 14:09:51 ..... finished inserting junctions into genome
+Apr 30 14:09:51 ... writing Genome to disk ...
+Writing 75397343 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/Genome ; empty space on disk = 27202465792 bytes ... done
+SA size in bytes: 327227030
+Apr 30 14:09:51 ... writing Suffix Array to disk ...
+Writing 327227030 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/SA ; empty space on disk = 27127066624 bytes ... done
+Apr 30 14:09:52 ... writing SAindex to disk
+Writing 8 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/SAindex ; empty space on disk = 26799837184 bytes ... done
+Writing 120 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/SAindex ; empty space on disk = 26799837184 bytes ... done
+Writing 1565873491 bytes into /home/ngs-01/workdir/Assignment2/chr22_with_ERCC92_2pass/SAindex ; empty space on disk = 26799837184 bytes ... done
+Apr 30 14:10:12 ..... finished successfully
 DONE: Genome generation, EXITING
