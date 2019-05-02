@@ -70,3 +70,18 @@ cd ~/workdir/assignment/ngs2_assignment
 mkdir BaseRecalibrate && cd BaseRecalibrate
 GenomeFasta=~/workdir/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa
 gatk --java-options "-Xmx2G" BaseRecalibrator -R $GenomeFasta -I ~/workdir/assignment/ngs2_assignment/runDir2/dedupped.bam -knownSites ~/workdir/assignment/ngs2_assignment/sample_data/homo_sapiens-chr22_fam.vcf -O recal_data.table
+
+#8 Variant calling
+cd ~/workdir/assignment/ngs2_assignment
+mkdir Vcall && Vcall 
+GATK=~/miniconda3/envs/ngs1/share/gatk4-4.1.2.0-0/gatk-package-4.1.2.0-local.jar
+GenomeFasta=~/workdir/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa
+java -jar $GATK -T HaplotypeCaller -R $GenomeFasta -I input.bam -dontUseSoftClippedBases -stand_call_conf 20.0 -o output.vcf 
+
+
+#9 Variant filtering
+cd ~/workdir/assignment/ngs2_assignment
+mkdir Vcall && Vcall 
+GATK=~/miniconda3/envs/ngs1/share/gatk4-4.1.2.0-0/gatk-package-4.1.2.0-local.jar
+GenomeFasta= ~/workdir/assignment/ngs2_assignment/sample_data/chr22_with_ERCC92.fa
+java -jar $GATK -T VariantFiltration -R $GenomeFasta -V input.vcf -window 35 -cluster 3 -filterName FS -filter "FS > 30.0" -filterName QD -filter "QD < 2.0" -o output.vcf                  
